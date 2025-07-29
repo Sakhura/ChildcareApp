@@ -1,51 +1,57 @@
 package com.sakhura.childcareapp
 
-import android.content.Context
-import androidx.room.Room
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.sakhura.childcareapp.presentation.screens.AddChildScreen
+import com.sakhura.childcareapp.presentation.screens.EndSessionScreen
+import com.sakhura.childcareapp.presentation.screens.HomeScreen
+import com.sakhura.childcareapp.ui.theme.ChildcareAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
-@Module
-@InstallIn(SingletonComponent::class)
-object DatabaseModule {
+@AndroidEntryPoint
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            ChildcareAppTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    val navController = rememberNavController()
 
-    @Provides
-    @Singleton
-    fun provideChildcareDatabase(@ApplicationContext context: Context): ChildcareDatabase {
-        return Room.databaseBuilder(
-            context,
-            ChildcareDatabase::class.java,
-            "childcare_database"
-        ).build()
-    }
-
-    @Provides
-    fun provideChildDao(database: ChildcareDatabase): ChildDao {
-        return database.childDao()
-    }
-
-    @Provides
-    fun provideParentDao(database: ChildcareDatabase): ParentDao {
-        return database.parentDao()
-    }
-
-    @Provides
-    fun provideCareSessionDao(database: ChildcareDatabase): CareSessionDao {
-        return database.careSessionDao()
-    }
-
-    // ✅ AGREGAR: Provider para ChildcareRepository
-    @Provides
-    @Singleton
-    fun provideChildcareRepository(
-        childDao: ChildDao,
-        parentDao: ParentDao,
-        careSessionDao: CareSessionDao
-    ): ChildcareRepository {
-        return ChildcareRepository(childDao, parentDao, careSessionDao)
+                    NavHost(
+                        navController = navController,
+                        startDestination = "home"
+                    ) {
+                        composable("home") {
+                            HomeScreen(navController = navController)
+                        }
+                        composable("add_child") {
+                            AddChildScreen(navController = navController)
+                        }
+                        composable("end_session/{sessionId}") { backStackEntry ->
+                            val sessionId = backStackEntry.arguments?.getString("sessionId")?.toLongOrNull() ?: 0L
+                            EndSessionScreen(
+                                navController = navController,
+                                sessionId = sessionId
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }

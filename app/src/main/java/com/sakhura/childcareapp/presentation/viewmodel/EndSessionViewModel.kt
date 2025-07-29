@@ -2,7 +2,7 @@ package com.sakhura.childcareapp.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.childcare.app.data.repository.ChildcareRepository
+import com.sakhura.childcareapp.data.repository.ChildcareRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

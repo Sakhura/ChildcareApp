@@ -31,7 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.childcare.app.presentation.viewmodel.EndSessionViewModel
+import com.sakhura.childcareapp.presentation.viewmodel.EndSessionViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.childcare.app"
+    namespace = "com.sakhura.childcareapp"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.childcare.app"
+        applicationId = "com.sakhura.childcareapp"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
